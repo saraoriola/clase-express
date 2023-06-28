@@ -33,22 +33,43 @@ app.post("/products", (req, res) => {
 
 
 app.put("/id/:id",(req,res)=>{
-    const found = products.some(products => products.id == req.params.id)
+    const found = products.some(product => product.id == req.params.id);
     if(found){
         products.forEach(product=>{
             if(product.id == req.params.id){
-                product.name = req.body.name ? req.body.name : product.name,
-                product.email = req.body.email ? req.body.email : product.email
-                res.send(product)
+                product.name = req.body.name ? req.body.name : product.name;
+                product.price = req.body.price ? req.body.price : product.price;
+                res.send(product);
             }
-        })
+        });
     }else{
-        
-        res.status(404).send({msg:`Product with id ${req.params.id} not found`})
+        res.status(404).send({msg:`Producto with id ${req.params.id} not found`});
     }
-})
+});
+
+app.delete("/id/:id",(req,res)=>{
+    const found = products.some(product => product.id == req.body.id)
+    if(found){
+     res.send(products.filter(product => product.id != req.body.id))
+    }else{
+
+        res.status(404).send({msg:`Product with id ${req.body.id} not found`})
+    }
+});
+
+app.get("/products/filter/price", (req, res) => {
+    const minPrice = req.query.min || 0;
+    const maxPrice = req.query.max || Infinity; 
+    
+    const filteredProducts = products.filter(
+      (product) => product.price >= minPrice && product.price <= maxPrice
+    );
+    
+    res.send({ results: filteredProducts });
+  });
+  
 
 
-app.listen(3000, () => {
+app.listen(8081, () => {
   console.log("Server started on port 3000");
 });
