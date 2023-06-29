@@ -4,7 +4,7 @@ const app = express()
 app.use(express.json());
 
 // Ruta: Raíz del sitio (‘/’) ,Metodo: get, Acción: Mostrar un mensaje de bienvenida
-app.get('/name', (req, res) => {
+app.get('/', (req, res) => {
   res.send("Welcome");
 });
 

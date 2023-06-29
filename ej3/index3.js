@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Ruta para obtener todos los productos
 app.get("/products", (req, res) => {
-  res.send({ results: products });
+  res.send({ description: "products", items: products });
 });
 
 // Ruta para crear un nuevo producto
@@ -57,17 +57,17 @@ app.put("/id/:id", (req, res) => {
 
 // Ruta para eliminar un producto por su ID
 app.delete("/id/:id", (req, res) => {
-  const found = products.some(product => product.id == req.body.id);
+  const found = products.some(product => product.id == req.params.id);
   if (found) {
     // Filtrar los productos y eliminar el producto con el ID especificado
-    res.send(products.filter(product => product.id != req.body.id));
+    res.send(products.filter(product => product.id != req.params.id));
   } else {
-    res.status(404).send({ msg: `Product with ID ${req.body.id} not found` });
+    res.status(404).send({ msg: `Product with ID ${req.params.id} not found` });
   }
 });
 
 // Ruta para obtener productos dentro de un rango de precios
-app.get("/products/filter/price", (req, res) => {
+app.get("/products/filter/price/all", (req, res) => {
   const minPrice = req.query.min || 0;
   const maxPrice = req.query.max || Infinity;
   
@@ -89,10 +89,10 @@ app.get("/products/filter/price", (req, res) => {
     product => product.price >= minPrice && product.price <= maxPrice
   );
   
-  res.send({ results: filteredProducts });
+  res.send({ results: filteredProducts }); 
 });
 
-//AQUÍ HE USADO CHATGPT PQ NO ENTENDIA NADA DE NADA...
+//AQUÍ HE USADO CHATGPT PQ NO ENTENDIA NADA DE NADA... 
 app.get("/products/filter/id/:id", (req, res) => {
     // Ruta GET para filtrar productos por ID
   
@@ -111,6 +111,7 @@ app.get("/products/filter/id/:id", (req, res) => {
     }
   });
   
+
 
   app.get("/products/filter/name/:name", (req, res) => {
     // Ruta GET para filtrar productos por nombre
@@ -138,3 +139,8 @@ app.get("/products/filter/id/:id", (req, res) => {
 app.listen(8081, () => {
   console.log("Server started on port 8081");
 });
+
+
+
+//APUNTES
+// %20 -> Es un espacio
